@@ -7,7 +7,7 @@ Plugin scripts export an init function with the following signature...
 
 Where...
 
-    api     The IRC api. This enabled registration for events such as join,
+    api     The IRC api. This enables registration for events such as join,
             part, invite, kicked, etc. See below for some examples.
 
     state   Stutbot provides a simple key/value data storage layer, an
