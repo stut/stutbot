@@ -48,6 +48,14 @@ To do
   had time to look into possible reasons yet. New modules are picked up with
   any issues.
 
+Git conventions
+===============
+
+Note that this project uses git-flow. See the following for more info...
+
+* http://nvie.com/posts/a-successful-git-branching-model/
+* http://github.com/nvie/gitflow
+
 Author
 ======
 
