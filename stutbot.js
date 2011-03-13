@@ -1,3 +1,5 @@
+var VERSION = '0.2';
+
 var config = require('./config').config;
 var state = require('./lib/state');
 var utils = require('./lib/utils');
@@ -9,7 +11,7 @@ var path = require('path');
 var plugins = {};
 var cmds = {};
 var helps = {};
-var api = null;
+var irc = null;
 
 // Initialise the state module
 state.init(config.state_db, function(error) {
@@ -18,20 +20,19 @@ state.init(config.state_db, function(error) {
 	} else {
 		// Initialise the plugins
 		// Start the bot
-		var irc = require('./lib/irc');
-		api = irc.api;
+		irc = require('./lib/irc');
 
 		builtinLoader();
-		pluginLoader(api, config.plugin_check_interval);
+		pluginLoader(irc, config.plugin_check_interval);
 
-		api.addListener('connect', function(client) {
+		irc.api.addListener('connect', function(client) {
 			// Connected to server, send any on_connect commands that are configured
 			if (config.oper) {
 				irc.send(client, 'oper', config.oper.user, config.oper.pass);
 			}
 		});
 
-		api.addListener('message', function(client, message, channel, nick) {
+		irc.api.addListener('message', function(client, message, channel, nick) {
 			if (message[0] == '!') {
 				// Extract the command and arguments
 				bits = message.substring(1).split(' ');
@@ -54,7 +55,7 @@ state.init(config.state_db, function(error) {
 			}
 		});
 
-		api.addListener('pm', function(client, message, nick) {
+		irc.api.addListener('pm', function(client, message, nick) {
 			if (message[0] == '!') {
 				message = message.substring(1);
 			}
@@ -97,6 +98,13 @@ var registerCommand = function(cmd, help, func) {
 
 var builtinLoader = function() {
 	registerCommand(
+		'version',
+		'Displays the Stutbot\'s version number',
+		function(irc, client, args, channel, nick) {
+			utils.sendMessage(irc, client, channel, nick, 'Stutbot v' + VERSION + ' at your service.');
+		});
+
+	registerCommand(
 		'reload',
 		'Forces a scan of the plugins folder to look for new and updated scripts.',
 		function(irc, client, args, channel, nick) {
@@ -124,7 +132,7 @@ var builtinLoader = function() {
 		});
 }
 
-var pluginLoader = function(api, interval, log) {
+var pluginLoader = function(irc, interval, log) {
 	var loaded = 0;
 	fs.readdir(config.plugin_folder, function (error, files) {
 		if (error) {
@@ -141,7 +149,7 @@ var pluginLoader = function(api, interval, log) {
 						log((plugins[files[x]] ? 'Reloading' : 'Loading') + ' ' + files[x].split('.', 2)[0]);
 					}
 					// Initialise the plugin
-					require(filename).init(api, state, registerCommand);
+					require(filename).init(irc, state, registerCommand);
 					plugins[files[x]] = stats.mtime.toString();
 					loaded++;
 				}
