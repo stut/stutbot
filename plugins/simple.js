@@ -1,5 +1,4 @@
 exports.init = function(api, state, registerCommand) {
-	// Eight ball
 	registerCommand('8', 'Magic 8-ball. Ask it a question!', function(irc, client, args, channel, nick) {
 		irc.sendMessage(client, channel, eightball_responses[Math.floor(Math.random()*eightball_responses.length)], nick);
 	});
@@ -13,6 +12,20 @@ exports.init = function(api, state, registerCommand) {
 		var minutes = current.getMinutes();
 		if (minutes < 10) minutes = "0" + minutes;
 		irc.sendMessage(client, channel, year + '-' + month + '-' + day + ' ' + hours + ':' + minutes, nick);
+	});
+	
+	registerCommand('dance', 'Make Stutbot dance!', function(irc, client, args, channel, nick) {
+		utils.sendMessage(irc, client, channel, nick, ':D\\-<');
+		utils.sendMessage(irc, client, channel, nick, ':D|-<');
+		utils.sendMessage(irc, client, channel, nick, ':D/-<');
+	});
+	
+	registerCommand('ping', 'Ping Stutbot.', function(irc, client, args, channel, nick) {
+		utils.sendMessage(irc, client, channel, nick, 'Please don\'t do that again; it hurts!');
+	});
+	
+	registerCommand('boogie', 'Make Stutbot dance!', function(irc, client, args, channel, nick) {
+		utils.sendMessage(irc, client, channel, nick, 'As a g33k I don\'t boogie. I just stare at my feet, shuffle and wonder when I can go to the kitchen.');
 	});
 }
 
