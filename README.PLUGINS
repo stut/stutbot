@@ -1,0 +1,115 @@
+Stutbot plugins
+===============
+
+Plugin scripts export an init function with the following signature...
+
+    function(api, state, registerCommand);
+
+Where...
+
+    api     The IRC api. This enabled registration for events such as join,
+            part, invite, kicked, etc. See below for some examples.
+
+    state   Stutbot provides a simple key/value data storage layer, an
+            instance of which is passed to every plugin in this parameter. It
+            provides async get, set and del methods and should be used to
+            store any data that you want to persist should the Stutbot process
+            get stopped for any reason.
+
+    registerCommand
+            This is a function that can be used to register a command to be
+            exposed to users. Call it like this...
+
+                registerCommand(
+                    cmd,     // The name of the command
+                    desc,    // Some help text for the user
+                    callback // The command handler function
+                );
+
+            The callback function signature looks like this...
+
+                function(
+                    irc,     // Exposes commands to send data to IRC
+                    client,  // This connection and is passed to irc commands
+                    args,    // Array of args received after the command
+                    channel, // The channel name, null for a PM
+                    nick     // The user who sent the command
+                )
+
+That's pretty straightforward, but here is where it gets a bit ugly. To send
+messages to IRC use the following functions...
+
+    // To send to a channel
+    irc.sendMessage(client, channel, message, nick);
+
+The nick argument is optional and will cause the message to be prefixed with
+"nick: ".
+
+    // To send a PM
+    irc.sendPM(client, nick, message);
+
+To save some oft-repeated code there is a sendMessage function in the utils
+file that will auto-switch between the two depending on whether channel is
+null.
+
+    // Send a message to the channel, or a PM if the channel is null
+    utils.sendMessage(irc, client, channel, nick, message);
+
+Pass nick as null to suppress the "nick: " prefix for channel messages.
+
+Some other functions provided by the irc object...
+
+    // To join a channel
+    irc.join(client, channel);
+
+    // To part a channel
+    irc.part(client, channel, message);
+
+    // To kick a user
+    irc.kick(client, channel, nick, message);
+
+There are others available too. Read lib/irc/irc.js for full details.
+
+As mentioned above plugins can register for other events in their init
+function. These include...
+
+    api.addListener('join', function(client, channel) {
+        // Joined a channel
+    });
+
+    api.addListener('disconnect', function(client) {
+        // Disconnected. Stutbot will automatically try to re-connect.
+        // While it's possible to write state info that you want to persist
+        // here I recommend that you save it as you go instead.
+    });
+
+    api.addListener('invite', function(client, channel, nick) {
+        // Bot was invited to a channel by nick
+    });
+
+    api.addListener('userjoin', function(client, channel, nick) {
+        // A user called nick joined channel
+    });
+
+    api.addListener('userpart', function(client, channel, nick, message) {
+        // A user called nick parted channel
+    });
+
+    api.addListener('userquit', function(client, nick, message) {
+        // A user called nick disconnected from the server
+    });
+
+    api.addListener('kicked', function(client, channel, message, admin) {
+        // Stutbot got kicked from channel by admin with message
+    });
+
+    api.addListener('userkicked',
+        function(client, channel, nick, message, admin) {
+            // A user called nick got kicked from channel by admin with
+            // message
+    });
+
+That's basically it for now. As mentioned in the README file I intend to
+massively clean up the API used by bots in the near future.
+
+Last updated: March 13th, 2011 @ 3am

@@ -1,0 +1,59 @@
+Stutbot
+=======
+
+An IRC bot written in node.js. It is extensible through a plugin architecture
+and uses sqlite to maintain state.
+
+Stutbot has a long history. I initially wrote it sometime in 2000, using PHP.
+I then rewrote it in C++ sometime during 2003, and then again with Python
+sometime in 2007. Unfortunately I've lost the Python version. :(
+
+To save some time I looked for an existing IRC library and found exactly what
+I was looking for here: https://github.com/Tim-Smart/node-ircbot-framework.
+It's not as encapsulated as I'd like, and that's something I plan to improve
+on at some point, but it's proven to be incredibly solid during my
+development.
+
+Install
+=======
+
+* Install node.js
+* Build the sqlite bindings from https://github.com/orlandov/node-sqlite and
+  put sqlite3_bindings.node and sqlite.js in lib/sqlite. The files in the
+  repository were built on Mac OSX 10.6.6.
+* Copy config.example.js to config.js and modify as needed
+* Run it: node stutbot.js
+
+Plugins
+=======
+
+See the README.PLUGINS file for detailed info on the plugin architecture.
+
+To do
+=====
+
+* The IRC framework accesses the config file directly. I'd prefer this to be
+  encapsulated such that it doesn't assume anything about the environment in
+  which it's running.
+
+* The way plugins interact with IRC is nasty and unnecessary. In conjunction
+  with the last todo I plan to build a class the encapsulates the IRC comms
+  such that plugins get given the instance of the class and it provides a
+  straightforward API for them to use without needing to worry about all the
+  details. This will include an abstracted way to register plugins for the
+  various events (join, part, invite, etc).
+
+* The plugin reload mechanism is not working. It correctly detects changed
+  plugins but the functionality does not change when they're reloaded. Haven't
+  had time to look into possible reasons yet. New modules are picked up with
+  any issues.
+
+Author
+======
+
+* Stuart Dallas
+* 3ft9 Ltd
+* http://3ft9.com/
+* Email is my first name at the domain name
+
+Last updated: March 13th, 2011 @ 2:43am
