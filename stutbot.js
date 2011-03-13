@@ -1,3 +1,5 @@
+var VERSION = '0.2';
+
 var config = require('./config').config;
 var state = require('./lib/state');
 var utils = require('./lib/utils');
@@ -95,6 +97,13 @@ var registerCommand = function(cmd, help, func) {
 }
 
 var builtinLoader = function() {
+	registerCommand(
+		'version',
+		'Displays the Stutbot\'s version number',
+		function(irc, client, args, channel, nick) {
+			utils.sendMessage(irc, client, channel, nick, 'Stutbot v' + VERSION + ' at your service.');
+		});
+
 	registerCommand(
 		'reload',
 		'Forces a scan of the plugins folder to look for new and updated scripts.',
