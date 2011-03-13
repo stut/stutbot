@@ -1,5 +1,5 @@
-Stutbot
-=======
+Stutbot 0.1
+===========
 
 An IRC bot written in node.js. It is extensible through a plugin architecture
 and uses sqlite to maintain state.
