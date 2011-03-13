@@ -99,7 +99,7 @@ var registerCommand = function(cmd, help, func) {
 var builtinLoader = function() {
 	registerCommand(
 		'version',
-		'Displays the Stutbot\'s version number',
+		'Displays Stutbot\'s version number',
 		function(irc, client, args, channel, nick) {
 			utils.sendMessage(irc, client, channel, nick, 'Stutbot v' + VERSION + ' at your service.');
 		});
