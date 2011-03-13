@@ -14,6 +14,7 @@ exports.plugins = {
 		user: 'username',
 		pass: 'password',
 		project: 'myproject',
+		repo: 'repository',
 		// The following options enable the repo callback function
 		// Host can be a hostname or IP
 		//callback_host: '1.2.3.4',

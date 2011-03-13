@@ -46,7 +46,7 @@ var repo = null;
 
 exports.init = function(api, state, registerCommand) {
 
-	// Get the project and repository, then set up a server and point the repo callback URL at it
+	// Get the project and repository
 	doAPI('projects/by_short_name/' + config.project, null, function(error, p) {
 		if (error) {
 			console.log(error);
@@ -58,7 +58,7 @@ exports.init = function(api, state, registerCommand) {
 					console.log(error);
 				} else {
 					for (var i in repositories) {
-						if (repositories[i].abbreviation == 'freeads') {
+						if (repositories[i].abbreviation == config.repo) {
 							repo = repositories[i];
 							break;
 						}
@@ -67,14 +67,15 @@ exports.init = function(api, state, registerCommand) {
 					// Repo callback functionality
 					if (config.callback_host) {
 						
-						// Set up the server here
+						// Set up an HTTP server to receive callbacks and point the repo callback URL at it
+						
 						http.createServer(function (req, res) {
 
 							// Would do something sensible with the callback data here
 							res.writeHead(200, {'Content-Type': 'text/plain'});
 							res.end('Thanks!');
 
-						}).listen(config.callback_port);
+						}).listen(config.callback_port, '0.0.0.0');
 
 						// Update the callback URL
 						doAPI('repositories/' + repo.id, JSON.stringify({ callback_url: 'http://' + config.callback_host + ':' + config.callback_port + '/' }), function(error, response) {
