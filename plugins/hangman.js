@@ -126,7 +126,7 @@ var outputHelp = function(cmd, all, irc, client, channel, nick) {
 	}
 }
 
-exports.init = function(api, stateIn, registerCommand) {
+exports.init = function(irc, stateIn, registerCommand) {
 	state = stateIn;
 
 	registerCommand('hangman', 'Play a game of hangman with me. !hangman help for full instructions.',

@@ -1,6 +1,8 @@
-exports.init = function(api, state, registerCommand) {
+var utils = require('../lib/utils');
+
+exports.init = function(irc, state, registerCommand) {
 	registerCommand('8', 'Magic 8-ball. Ask it a question!', function(irc, client, args, channel, nick) {
-		irc.sendMessage(client, channel, eightball_responses[Math.floor(Math.random()*eightball_responses.length)], nick);
+		utils.sendMessage(irc, client, channel, nick, eightball_responses[Math.floor(Math.random()*eightball_responses.length)]);
 	});
 
 	registerCommand('now', 'Tells you what the current date and time are.', function(irc, client, args, channel, nick) {
@@ -11,7 +13,7 @@ exports.init = function(api, state, registerCommand) {
 		var hours = current.getHours();
 		var minutes = current.getMinutes();
 		if (minutes < 10) minutes = "0" + minutes;
-		irc.sendMessage(client, channel, year + '-' + month + '-' + day + ' ' + hours + ':' + minutes, nick);
+		utils.sendMessage(irc, client, channel, nick, year + '-' + month + '-' + day + ' ' + hours + ':' + minutes);
 	});
 	
 	registerCommand('dance', 'Make Stutbot dance!', function(irc, client, args, channel, nick) {
