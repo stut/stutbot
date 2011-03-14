@@ -1,4 +1,4 @@
-var VERSION = '0.3';
+var VERSION = '0.3a';
 
 var config = require('./config').config;
 var state = require('./lib/state');
@@ -108,7 +108,7 @@ var builtinLoader = function() {
 		'reload',
 		'Forces a scan of the plugins folder to look for new and updated scripts.',
 		function(irc, client, args, channel, nick) {
-			pluginLoader(api, 0, function(logmsg) {
+			pluginLoader(irc.api, 0, function(logmsg) {
 				utils.sendMessage(irc, client, channel, nick, logmsg);
 			});
 		});
@@ -156,7 +156,7 @@ var pluginLoader = function(irc, interval, log) {
 			}
 			if (interval > 0) {
 				setTimeout(function() {
-					pluginLoader(api, interval);
+					pluginLoader(irc, interval);
 				}, interval * 1000);
 			}
 		}
