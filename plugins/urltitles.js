@@ -5,7 +5,7 @@ var utils = require('../lib/utils'),
 
 var fetchHTMLTitle = function(u, callback, get_it) {
 
-	urlbits = url.parse(u);
+	var urlbits = url.parse(u);
 
 	options = {
 		host: urlbits.host,
@@ -48,7 +48,7 @@ var fetchHTMLTitle = function(u, callback, get_it) {
 
 }
 
-exports.init = function(irc, state, registerCommand) {
+exports.init = function(irc, configIn, stateIn, registerCommand) {
 	irc.api.addListener('message', function(client, message, channel, nick) {
 		if (message.indexOf('http') != -1) {
 			bits = message.split(' ');

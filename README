@@ -1,4 +1,4 @@
-Stutbot 0.2
+Stutbot 0.4
 ===========
 
 An IRC bot written in node.js. It is extensible through a plugin architecture

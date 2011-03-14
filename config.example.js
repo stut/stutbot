@@ -6,6 +6,7 @@ exports.config = {
 	//	user: 'frank',
 	//	pass: 'grabthar\'s hammer',
 	//},
+	plugins: { },
 };
 
 exports.plugins = {

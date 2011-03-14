@@ -1,4 +1,4 @@
-var VERSION = '0.2';
+var VERSION = '0.4';
 
 var config = require('./config').config;
 var state = require('./lib/state');
@@ -99,7 +99,7 @@ var registerCommand = function(cmd, help, func) {
 var builtinLoader = function() {
 	registerCommand(
 		'version',
-		'Displays the Stutbot\'s version number',
+		'Displays Stutbot\'s version number',
 		function(irc, client, args, channel, nick) {
 			utils.sendMessage(irc, client, channel, nick, 'Stutbot v' + VERSION + ' at your service.');
 		});
@@ -108,7 +108,7 @@ var builtinLoader = function() {
 		'reload',
 		'Forces a scan of the plugins folder to look for new and updated scripts.',
 		function(irc, client, args, channel, nick) {
-			pluginLoader(api, 0, function(logmsg) {
+			pluginLoader(irc.api, 0, function(logmsg) {
 				utils.sendMessage(irc, client, channel, nick, logmsg);
 			});
 		});
@@ -145,18 +145,28 @@ var pluginLoader = function(irc, interval, log) {
 				var filename = config.plugin_folder + files[x];
 				var stats = fs.statSync(filename);
 				if (plugins[files[x]] != stats.mtime.toString()) {
+					var pluginName = files[x].split('.', 2)[0];
 					if (log) {
-						log((plugins[files[x]] ? 'Reloading' : 'Loading') + ' ' + files[x].split('.', 2)[0]);
+						log((plugins[files[x]] ? 'Reloading' : 'Loading') + ' ' + pluginName);
 					}
-					// Initialise the plugin
-					require(filename).init(irc, state, registerCommand);
-					plugins[files[x]] = stats.mtime.toString();
-					loaded++;
+					// Has the plugin been disabled in the config?
+					var conf = { enabled: true };
+					if (config.plugins && config.plugins[pluginName]) {
+						conf = config.plugins[pluginName];
+					}
+					if (conf.enabled == undefined || conf.enabled) {
+						// Initialise the plugin
+						require(filename).init(irc, conf, state, registerCommand);
+						plugins[files[x]] = stats.mtime.toString();
+						loaded++;
+					} else if (log) {
+						log('Not loading disabled plugin ' + pluginName);
+					}
 				}
 			}
 			if (interval > 0) {
 				setTimeout(function() {
-					pluginLoader(api, interval);
+					pluginLoader(irc, interval);
 				}, interval * 1000);
 			}
 		}
