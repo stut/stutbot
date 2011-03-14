@@ -5,7 +5,7 @@ var utils = require('../lib/utils'),
 
 var fetchHTMLTitle = function(u, callback, get_it) {
 
-	urlbits = url.parse(u);
+	var urlbits = url.parse(u);
 
 	options = {
 		host: urlbits.host,
