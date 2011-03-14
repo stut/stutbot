@@ -380,7 +380,7 @@ var startGame = function(irc, client, args, channel, nick) {
 			} else {
 
 				// All done! Tell the channel...
-				irc.sendMessage(client, inChannel, '[hangman] ' + nick + ' has started a game of hangman in this channel. Send !hangman <guess> where <guess> is the letter, word or phrase to try.');
+				irc.sendMessage(client, inChannel, '[hangman] ' + nick + ' has started a game of hangman in this channel. Send !hangman guess <guess> where <guess> is the letter, word or phrase to try.');
 				sendGameState(game, irc, client, inChannel);
 
 			    // And tell the user we've started it

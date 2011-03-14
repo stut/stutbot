@@ -1,4 +1,4 @@
-var VERSION = '0.3a';
+var VERSION = '0.3b';
 
 var config = require('./config').config;
 var state = require('./lib/state');
