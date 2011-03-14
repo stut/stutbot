@@ -38,7 +38,7 @@ var saveInfo = function(channel, nick, msg, callback) {
 	}
 }
 
-exports.init = function(irc, stateIn, registerCommand) {
+exports.init = function(irc, configIn, stateIn, registerCommand) {
 	state = stateIn;
 	
 	// Register a message listener which will take care of storing user activity

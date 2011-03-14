@@ -6,6 +6,20 @@ exports.config = {
 	//	user: 'frank',
 	//	pass: 'grabthar\'s hammer',
 	//},
+	plugins: {
+
+		/*udp: {
+			servers: [
+				{
+					ip: '0.0.0.0',
+					port: 32198,
+					channel: '#dev',
+					prefix: '[udp] ',
+				},
+			],
+		},*/
+
+	},
 };
 
 exports.profiles = [{

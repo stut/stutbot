@@ -1,6 +1,6 @@
 var utils = require('../lib/utils');
 
-exports.init = function(irc, state, registerCommand) {
+exports.init = function(irc, config, state, registerCommand) {
 	registerCommand('8', 'Magic 8-ball. Ask it a question!', function(irc, client, args, channel, nick) {
 		utils.sendMessage(irc, client, channel, nick, eightball_responses[Math.floor(Math.random()*eightball_responses.length)]);
 	});
