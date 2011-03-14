@@ -3,7 +3,7 @@
 
 var utils = require('../lib/utils');
 
-exports.init = function(irc, state, registerCommand) {
+exports.init = function(irc, config, state, registerCommand) {
 	registerCommand('vs', 'Decide who would win a fight: !vs fighter_1 fighter_2', function(irc, client, args, channel, nick) {
 		// Make sure we have 2 players
 		if (args.length < 2) {
