@@ -146,21 +146,23 @@ var pluginLoader = function(irc, interval, log) {
 				var stats = fs.statSync(filename);
 				if (plugins[files[x]] != stats.mtime.toString()) {
 					var pluginName = files[x].split('.', 2)[0];
-					if (log) {
-						log((plugins[files[x]] ? 'Reloading' : 'Loading') + ' ' + pluginName);
-					}
-					// Has the plugin been disabled in the config?
-					var conf = { enabled: true };
-					if (config.plugins && config.plugins[pluginName]) {
-						conf = config.plugins[pluginName];
-					}
-					if (conf.enabled == undefined || conf.enabled) {
-						// Initialise the plugin
-						require(filename).init(irc, conf, state, registerCommand);
-						plugins[files[x]] = stats.mtime.toString();
-						loaded++;
-					} else if (log) {
-						log('Not loading disabled plugin ' + pluginName);
+					if (pluginName != 'unfuddle') {
+						if (log) {
+							log((plugins[files[x]] ? 'Reloading' : 'Loading') + ' ' + pluginName);
+						}
+						// Has the plugin been disabled in the config?
+						var conf = { enabled: true };
+						if (config.plugins && config.plugins[pluginName]) {
+							conf = config.plugins[pluginName];
+						}
+						if (conf.enabled == undefined || conf.enabled) {
+							// Initialise the plugin
+							require(filename).init(irc, conf, state, registerCommand);
+							plugins[files[x]] = stats.mtime.toString();
+							loaded++;
+						} else if (log) {
+							log('Not loading disabled plugin ' + pluginName);
+						}
 					}
 				}
 			}
